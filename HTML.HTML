@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תפילה לחטופים</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- קוד CSS (style.css) מוטמע כאן --- */
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #4CAF50; /* ירוק */
+            --primary-dark: #388E3C;
+            --secondary-color: #2196F3; /* כחול */
+            --background-light: #E8F5E9;
+            --card-background: #FFFFFF;
+            --text-color: #333333;
+            --border-color: #CCCCCC;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, var(--background-light) 0%, #C8E6C9 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            direction: rtl; /* מימין לשמאל עבור עברית */
+            text-align: right;
+        }
+
+        .container {
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden; /* למעברים חלקים */
+        }
+
+        /* --- קטע אימות --- */
+        .auth-section {
+            position: relative;
+            height: 550px; /* התאם לפי גובה התוכן */
+            transition: height 0.5s ease-in-out;
+        }
+
+        .auth-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-card.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="email"]:focus,
+        .input-group input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn.primary {
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn.primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .switch-auth {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .switch-auth a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .switch-auth a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* --- קטע תוכן ראשי --- */
+        .main-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .main-content h1 {
+            color: var(--primary-dark);
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .captive-info {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .captive-info p {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .captive-info h2 {
+            color: var(--secondary-color);
+            font-size: 2.8em;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .tehillim-section {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: justify;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .tehillim-section h3 {
+            color: var(--primary-dark);
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tehillim-section p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #444;
+            max-height: 300px; /* הגבל גובה לגלילה במידת הצורך */
+            overflow-y: auto; /* אפשר גלילה לטקסטים ארוכים */
+            padding-left: 10px; /* מרווח עבור פס גלילה */
+        }
+
+        .btn.success {
+            background-color: var(--success-color);
+            color: white;
+            margin-top: 30px;
+            padding: 18px;
+            font-size: 1.3em;
+            border-radius: 10px;
+        }
+
+        .btn.success:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-after-prayer {
+            margin-top: 30px;
+            background-color: #e0f2f1; /* ירוק-כחול בהיר */
+            border: 1px solid #009688; /* ירוק-כחול כהה */
+            border-radius: 10px;
+            padding: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .message-after-prayer p {
+            color: #00796B; /* ירוק-כחול כהה יותר */
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* אנימציות */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* התאמות רספונסיביות */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                width: 95%;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .main-content h1 {
+                font-size: 2em;
+            }
+
+            .captive-info h2 {
+                font-size: 2.2em;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 1em;
+            }
+
+            .btn.success {
+                padding: 15px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-section" id="authSection">
+            <div class="auth-card active" id="loginCard">
+                <h2>התחברות</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginEmail">שם משתמש / אימייל</label>
+                        <input type="text" id="loginEmail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">סיסמה</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn primary">התחבר</button>
+                    <p class="switch-auth">אין לך חשבון? <a href="#" id="showSignup">הירשם כאן</a></p>
+                </form>
+            </div>
+
+            <div class="auth-card" id="signupCard">
+                <h2>הרשמה</h2>
+                <form id="signupForm">
+                    <div class="input-group">
+                        <label for="signupUsername">שם משתמש</label>
+                        <input type="text" id="signupUsername" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signupEmail">אימייל</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signupPassword">סיסמה</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signupConfirmPassword">אימות סיסמה</label>
+                        <input type="password" id="signupConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn primary">הירשם</button>
+                    <p class="switch-auth">כבר יש לך חשבון? <a href="#" id="showLogin">התחבר כאן</a></p>
+                </form>
+            </div>
+        </div>
+
+        <div class="main-content" id="mainContent" style="display: none;">
+            <h1>תפילה לשחרור חטופים</h1>
+            <div class="captive-info">
+                <p>היום נתפלל על:</p>
+                <h2 id="captiveName"></h2>
+                <div class="tehillim-section">
+                    <h3>פרק תהילים להגיד:</h3>
+                    <p id="tehillimText">
+                        </p>
+                </div>
+                <button class="btn success" id="finishedButton">סיימתי!</button>
+                <div class="message-after-prayer" id="afterPrayerMessage" style="display: none;">
+                    <p>בעז"ה בזכותך החטוף ישתחרר!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- קוד JavaScript (script.js) מוטמע כאן --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const authSection = document.getElementById('authSection');
+            const loginCard = document.getElementById('loginCard');
+            const signupCard = document.getElementById('signupCard');
+            const showSignupLink = document.getElementById('showSignup');
+            const showLoginLink = document.getElementById('showLogin');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const mainContent = document.getElementById('mainContent');
+            const finishedButton = document.getElementById('finishedButton');
+            const afterPrayerMessage = document.getElementById('afterPrayerMessage');
+            const captiveNameDisplay = document.getElementById('captiveName');
+            const tehillimTextDisplay = document.getElementById('tehillimText');
+
+            // --- לוגיקת ממשק משתמש של אימות ---
+            showSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginCard.classList.remove('active');
+                signupCard.classList.add('active');
+                authSection.style.height = signupCard.offsetHeight + 'px'; // התאם גובה לטופס הרשמה
+            });
+
+            showLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupCard.classList.remove('active');
+                loginCard.classList.add('active');
+                authSection.style.height = loginCard.offsetHeight + 'px'; // התאם גובה לטופס כניסה
+            });
+
+            // התאם גובה ראשוני
+            authSection.style.height = loginCard.offsetHeight + 'px';
+
+            // --- הדמיית כניסה/הרשמה (צד לקוח בלבד) ---
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // באפליקציה אמיתית, היית שולח זאת לשרת לאימות.
+                // להדגמה, אנחנו פשוט "נכנסים" בהצלחה.
+                alert('התחברת בהצלחה! (זוהי הדגמה בלבד)');
+                showMainContent();
+            });
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+                if (password !== confirmPassword) {
+                    alert('הסיסמאות אינן תואמות!');
+                    return;
+                }
+                // באפליקציה אמיתית, היית שולח זאת לשרת להרשמה.
+                // להדגמה, אנחנו פשוט "נרשמים" בהצלחה.
+                alert('נרשמת בהצלחה! (זוהי הדגמה בלבד)');
+                showMainContent();
+            });
+
+            function showMainContent() {
+                authSection.style.display = 'none';
+                mainContent.style.display = 'block';
+                loadDailyContent(); // טען חטוף וטקסט תהילים
+                setDailyMessageReset(); // הגדר איפוס הודעה יומית
+            }
+
+            // --- לוגיקת תוכן דינמי וכפתור "סיימתי" ---
+            const captives = [
+                "אופיר צרפתי ז\"ל",
+                "יצחק אלגרט",
+                "אלמוג מאיר ג'אן",
+                "אנדריי קוזלוב",
+                "שלומי זיו",
+                "נועה ארגמני",
+                // הוסף כאן שמות חטופים נוספים
+            ];
+
+            const tehillimChapters = {
+                // עליך להחליף את אלה בטקסטים אמיתיים של פרקי תהילים.
+                // לשם קיצור, אני משתמש במילוי מקום.
+                "placeholder1": "פרק א: אשרי האיש אשר לא הלך בעצת רשעים... (טקסט מלא של פרק תהילים א')",
+                "placeholder2": "פרק ב: למה רגשו גוים ולאמים יהגו ריק... (טקסט מלא של פרק תהילים ב')",
+                "placeholder3": "פרק ג: ה' מה רבו צרי רבים קמים עלי... (טקסט מלא של פרק תהילים ג')",
+                "placeholder4": "פרק ד: בנגן מנצח מזמור לדוד... (טקסט מלא של פרק תהילים ד')",
+                "placeholder5": "פרק ה: למנצח אל הנחילות מזמור לדוד... (טקסט מלא של פרק תהילים ה')",
+                "placeholder6": "פרק ו: ה' אל באפך תוכיחני ואל בחמתך תיסרני... (טקסט מלא של פרק תהילים ו')"
+            };
+
+            function getDailyCaptiveAndTehillim() {
+                const today = new Date();
+                const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+                
+                // השתמש ברוטציה יומית פשוטה לצורך הדגמה
+                const captiveIndex = dayOfYear % captives.length;
+                const tehillimKeys = Object.keys(tehillimChapters);
+                const tehillimIndex = dayOfYear % tehillimKeys.length;
+
+                return {
+                    captive: captives[captiveIndex],
+                    tehillim: tehillimChapters[tehillimKeys[tehillimIndex]]
+                };
+            }
+
+            function loadDailyContent() {
+                const dailyContent = getDailyCaptiveAndTehillim();
+                captiveNameDisplay.textContent = dailyContent.captive;
+                tehillimTextDisplay.textContent = dailyContent.tehillim;
+
+                // בדוק אם יש להציג את הודעת ה"סיימתי" מהפעלה קודמת היום
+                const lastPrayerDate = localStorage.getItem('lastPrayerDate');
+                const today = new Date().toDateString();
+                if (lastPrayerDate === today) {
+                    showAfterPrayerMessage(true); // הצג הודעה אם כבר התפלל היום
+                } else {
+                    afterPrayerMessage.style.display = 'none';
+                    finishedButton.style.display = 'block';
+                    tehillimTextDisplay.style.display = 'block';
+                }
+            }
+
+            finishedButton.addEventListener('click', () => {
+                showAfterPrayerMessage(false); // הצג את ההודעה
+                localStorage.setItem('lastPrayerDate', new Date().toDateString()); // סמן שהתפילה בוצעה היום
+            });
+
+            function showAfterPrayerMessage(isReload) {
+                tehillimTextDisplay.style.display = 'none';
+                finishedButton.style.display = 'none';
+                afterPrayerMessage.style.display = 'block';
+                if (!isReload) {
+                    afterPrayerMessage.style.animation = 'fadeIn 1s ease-out'; // החל אנימציה רק בהצגה ראשונה
+                } else {
+                    afterPrayerMessage.style.animation = 'none'; // אין אנימציה בטעינה מחדש
+                }
+            }
+
+            function setDailyMessageReset() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(now.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0); // הגדר לחצות הלילה של יום למחרת
+
+                const timeToReset = tomorrow.getTime() - now.getTime();
+
+                // אם נשאר פחות מ-10 דקות לאיפוס, הגדר טיימר מיידי. אחרת, הגדר אותו לחצות הלילה.
+                // זה מטפל במקרה שבו המשתמש פותח את הדף ממש לפני חצות.
+                const resetThreshold = 10 * 60 * 1000; // 10 דקות
+                const actualTimeToReset = timeToReset < resetThreshold ? timeToReset + (24 * 60 * 60 * 1000) : timeToReset; // אם פחות מ-10 דקות, אפס למחרת באותו זמן
+
+                setTimeout(() => {
+                    // זה יופעל רק אם המשתמש נשאר בדף.
+                    // לפתרון חזק, הקצה האחורי ינהל זאת.
+                    localStorage.removeItem('lastPrayerDate');
+                    loadDailyContent(); // טען מחדש תוכן כדי להציג שוב את התהילים
+                    console.log('Daily content reset!');
+                }, actualTimeToReset);
+            }
+
+            // כדי להתחיל עם מסך הכניסה (ברירת מחדל):
+            mainContent.style.display = 'none';
+            authSection.style.display = 'block';
+
+            // אם ברצונך לבדוק ישירות את התוכן הראשי (למטרות פיתוח):
+            // showMainContent();
+        });
+    </script>
+</body>
+</html>
